@@ -19,6 +19,8 @@
             font-size: 1vw;
             line-height: 1vw;
             color: #00ff00;
+            width: 128vw;
+            height: 64vh;
         }
 
         #videoFeed {
@@ -32,8 +34,8 @@
     <title>Video Ascii Art</title>
 </head>
 <body>
-<video id="videoFeed" width="480px" height="360px" autoplay playsinline></video>
-<canvas id="canvas" width="480px" height="360px"></canvas>
+<video id="videoFeed" autoplay playsinline></video>
+<canvas id="canvas"></canvas>
 <div id="asciiArt"></div>
 <script>
     const videoFeed = document.getElementById('videoFeed');
@@ -45,8 +47,8 @@
     let intervalId;
     // const ascii = "@%#*+=-:. ";
     const ascii =".:-=+*#%@";
-    const width = 100;
-    const height = 50;
+    const width = 128;
+    const height = 64;
 
     async function processImage() {
         const startTime = performance.now()
