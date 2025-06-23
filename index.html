@@ -16,11 +16,11 @@
 
         #asciiArt {
             font-family: "Courier New", monospace;
-            font-size: 1vw;
-            line-height: 1vw;
+            font-size: .5vw;
+            line-height: .5vw;
             color: #00ff00;
-            width: 128vw;
-            height: 64vh;
+            width: 100vw;
+            height: 100vh;
         }
 
         #videoFeed {
@@ -42,16 +42,13 @@
     const canvas = document.getElementById('canvas');
     const context = canvas.getContext('2d', {willReadFrequently: true});
     const asciiArtDiv = document.getElementById('asciiArt');
-
     let stream;
     let intervalId;
-    // const ascii = "@%#*+=-:. ";
-    const ascii =".:-=+*#%@";
-    const width = 128;
-    const height = 64;
+    const ascii ="_.,-=+:;cba!?0123456789$W#@Ñ";
+    const width = 256;
+    const height = 128;
 
     async function processImage() {
-        const startTime = performance.now()
         context.drawImage(videoFeed, 0, 0, width, height);
         const imageData = context.getImageData(0, 0, width, height).data;
         let asciiArt = "";
@@ -64,15 +61,13 @@
             asciiArt += "<BR>";
         }
         asciiArtDiv.innerHTML = asciiArt;
-        const endTime = performance.now()
-        console.log(`Call took ${endTime - startTime} milliseconds`)
     }
 
     async function startProcessing() {
         try {
             stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
             videoFeed.srcObject = stream;
-            intervalId = setInterval(processImage, 500);
+            intervalId = setInterval(processImage, 200);
         } catch (err) {
             console.error("Error accessing camera:", err);
         }
