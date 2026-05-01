@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 1280px;
+            height: 720px;
+            overflow: hidden;
+            background-color: black;
+            font-family: "Courier New", monospace;
+        }
+
+        #wrapper{
+            width: 1280px;
+            height: 720px;
+	    position: relative;
+        }
+
+        #asciiArt {
+            font-size: 8px;
+            line-height: 8px;
+            color: #00ff00;
+            width: 1280px;
+            height: 720px;
+            overflow: hidden;
+        }
+
+        #videoFeed {
+            display: none;
+        }
+
+        #canvas {
+            display: none;
+        }
+    </style>
+    <title>Video Ascii Art</title>
+</head>
+<body>
+<video id="videoFeed" autoplay playsinline></video>
+<canvas id="canvas"></canvas>
+<div id="wrapper">
+    <div id="asciiArt"></div>
+</div>
+<script>
+    const videoFeed = document.getElementById('videoFeed');
+    const canvas = document.getElementById('canvas');
+    const context = canvas.getContext('2d', {willReadFrequently: true});
+    const asciiArtDiv = document.getElementById('asciiArt');
+    const wrapper = document.getElementById('wrapper');
+    let stream;
+    let intervalId;
+    const ascii ="_.,-=+:;cba!?0123456789$W#@Ñ";
+    const width = 160;
+    const height = 90;
+
+    function resize() {
+        const scaleX = window.innerWidth / 1280;
+        const scaleY = window.innerHeight / 720;
+        wrapper.style.transform = `scale(${scaleX}, ${scaleY})`;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    async function processImage() {
+        context.drawImage(videoFeed, 0, 0, width, height);
+        const imageData = context.getImageData(0, 0, width, height).data;
+        let asciiArt = "";
+        for (let j = 0; j < height; j++) {
+            for (let i = 0; i < width; i++) {
+                const index = (i + j * width) * 4;
+                let brightness = Math.floor(((imageData[index] + imageData[index + 1] + imageData[index + 2]) * ascii.length) / (3 * 256));
+                asciiArt += ascii[brightness];
+            }
+            asciiArt += "<BR>";
+        }
+        asciiArtDiv.innerHTML = asciiArt;
+    }
+
+    async function startProcessing() {
+        try {
+            stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+            videoFeed.srcObject = stream;
+            intervalId = setInterval(processImage, 200);
+        } catch (err) {
+            console.error("Error accessing camera:", err);
+        }
+    }
+
+    // Initialize camera when the page loads
+    window.addEventListener('DOMContentLoaded', startProcessing);
+
+    // Optional: Stop stream when page is closed/navigated away to release camera
+    window.addEventListener('beforeunload', () => {
+        if (stream) {
+            stream.getTracks().forEach(track => track.stop());
+        }
+        if (intervalId) {
+            clearInterval(intervalId);
+        }
+    });
+</script>
+</body>
+</html>
