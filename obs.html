@@ -10,16 +10,16 @@
         }
 
         html, body {
-            width: 1600px;
-            height: 800px;
+            width: 1920px;
+            height: 1080px;
             overflow: hidden;
             background-color: black;
             font-family: "Courier New", monospace;
         }
 
         #wrapper{
-            width: 1600px;
-            height: 800px;
+            width: 1920px;
+            height: 1080px;
 	    position: relative;
         }
 
@@ -27,8 +27,8 @@
             font-size: 8px;
             line-height: 8px;
             color: #00ff00;
-            width: 1600px;
-            height: 800px;
+            width: 1920px;
+            height: 1080px;
             overflow: hidden;
         }
 
@@ -57,12 +57,12 @@
     let stream;
     let intervalId;
     const ascii ="_.,-=+:;cba!?0123456789$W#@Ñ";
-    const width = 200;
-    const height = 100;
+    const width = 240;
+    const height = 135;
 
     function resize() {
-        const scaleX = window.innerWidth / 1600;
-        const scaleY = window.innerHeight / 800;
+        const scaleX = window.innerWidth / 1920;
+        const scaleY = window.innerHeight / 1080;
         wrapper.style.transform = `scale(${scaleX}, ${scaleY})`;
     }
     window.addEventListener('resize', resize);
